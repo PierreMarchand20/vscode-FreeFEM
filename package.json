@@ -1,0 +1,37 @@
+{
+    "author": "Pierre Marchand",
+    "name": "vscode-freefem",
+    "displayName": "vscode-FreeFEM",
+    "description": "FreeFEM language support in Visual Studio Code",
+    "version": "0.0.1",
+    "keywords": [
+        "FreeFEM",
+        "language"
+    ],
+    "engines": {
+        "vscode": "^1.40.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "freefem",
+            "aliases": ["FreeFEM", "freefem"],
+            "extensions": [".edp"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "freefem",
+            "scopeName": "source.edp",
+            "path": "./syntaxes/freefem.tmLanguage.json"
+        }],
+        "homepage": "https://freefem.org",
+        "license": "MIT",
+        "publisher": "Pierre-Marchand"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/PierreMarchand20/vscode-FreeFEM.git"
+    }
+}
