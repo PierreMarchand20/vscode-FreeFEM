@@ -78,8 +78,32 @@
 		"storage": {
 			"patterns": [
 				{
-					"match": "\\b(bool|border|complex|dmatrix|fespace|func|gslspline|ifstream|int|macro|matrix|mesh|mesh3|meshS|meshL|mpiComm|mpiGroup|mpiRequest|NewMacro|EndMacro|ofstream|Pmmap|problem|Psemaphore|real|solve|string|varf)\\b",
+					"match": "\\b(bool|complex|dmatrix|fespace|func|gslspline|ifstream|int|macro|matrix|mesh|mesh3|meshS|meshL|mpiComm|mpiGroup|mpiRequest|NewMacro|EndMacro|ofstream|Pmmap|problem|Psemaphore|real|solve|string|varf)\\b",
 					"name": "storage.type.freefem"
+				},
+				{
+					"begin": "(border|curve3)\\s",
+					"end": "\\}",
+					"beginCaptures": {
+						"1":{"name":"storage.type.geometry.freefem"}
+					},
+					"patterns": [
+						{
+							"match": "(t|x|y|z)=",
+							"captures": {
+								"1":{"name":"constant.language"}
+							}
+						},
+						{
+							"include": "#constant"
+ 						},
+						{
+							"include": "#keywords"
+						},
+						{
+							"include": "#support"
+						}
+					]
 				}
 			]
 		},
