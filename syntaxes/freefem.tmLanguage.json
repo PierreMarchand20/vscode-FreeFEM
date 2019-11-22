@@ -129,6 +129,27 @@
 					"beginCaptures": {
 						"1" :{"name": "support.function.freefem"}
 					}
+				},
+				{
+					"begin": "(int1d|int2d|int3d)\\(\\w*\\)\\(",
+					"end": "\\);",
+					"beginCaptures": {
+						"1" :{"name": "support.function.freefem"}
+					},
+					"patterns": [
+						{
+							"match": "(?<!\\w)(x|y)(?!\\w)",
+							"captures": {
+								"1" :{"name":"variable.parameter.freefem"}
+							}
+						},
+						{
+							"include": "#constant"
+ 						},
+						{
+							"include": "#keywords"
+						}
+					]
 				}
 			]
 		}
