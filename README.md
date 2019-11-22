@@ -6,6 +6,6 @@
 
 ## Release Notes
 
-### 1.0.0
+### 0.0
 
-Initial release of `vscode-freeFEM`
+Initial release of `vscode-freeFEM`, work in progress...

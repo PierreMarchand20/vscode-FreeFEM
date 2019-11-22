@@ -124,10 +124,9 @@
  						},
 						{
 							"include": "#keywords"
-						}
-						,
+						},
 						{
-							"include": "#string"
+							"include": "#strings"
 						}
 					],
 					"beginCaptures": {
