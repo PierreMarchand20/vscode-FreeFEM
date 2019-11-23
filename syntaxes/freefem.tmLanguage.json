@@ -134,11 +134,18 @@
 					}
 				},
 				{
-					"begin": "(int1d|int2d|int3d)\\(\\w*\\)\\(",
-					"end": "\\);",
-					"beginCaptures": {
-						"1" :{"name": "support.function.freefem"}
-					},
+					"match": "(int\\dd)(\\(.*?\\))(\\((?:[^)(]+|\\((?:[^)(]+|\\([^)(]*\\))*\\))*\\))",
+					"captures": {
+						"1":{"name": "support.function.freefem"},
+						"2":
+						{
+							"name":"meta.function.call.int.freefem",
+							"patterns": [
+								{
+									"include": "$self"
+								}
+							]
+						},
 					"patterns": [
 						{
 							"match": "(?<!\\w)(x|y)(?!\\w)",
