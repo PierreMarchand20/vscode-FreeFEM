@@ -4,49 +4,220 @@
 	"scopeName": "source.edp",
 	"patterns": [
 		{
-			"include": "#keywords"
+			"include": "#statement"
 		},
 		{
-			"include": "#strings"
-		},
-		{
-			"include": "#comments"
-		},
-		{
-			"include": "#constant"
-		},
-		{
-			"include": "#storage"
-		},
-		{
-			"include": "#support"
+			"include": "#expression"
 		}
 	],
 	"repository": {
-		"keywords": {
+		"statement":{
 			"patterns": [
 				{
-					"name": "keyword.control.freefem",
-					"match": "\\b(break|catch|continue|else|for|if|include|load|return|try|while)\\b"
+					"include": "#import"
 				},
 				{
-					"name": "keyword.operator.freefem",
-					"match": "(\\+|-|\\*|>|<|=|<=|>=|==|%|\\+=|-=|/=|\\*=|\\+\\+|--|\\^|!=|<<|>>|\/(?![\/*]))"
+					"include": "#class-declaration"
 				},
 				{
-					"name": "keyword.operator.logical.freefem",
-					"match": "(!|&&|\\|\\||\\?)"
+					"include": "#function-declaration"
+				},
+				{
+					"include": "#statement-keyword"
+				},
+				{
+					"include": "#assignment-operator"
+				},
+				{
+					"include": "#decorator"
+				},
+				{
+					"include": "#docstring-statement"
+				},
+				{
+					"include": "#semicolon"
 				}
 			]
 		},
-		"strings": {
-			"name": "string.quoted.double.freefem",
-			"begin": "\"",
-			"end": "\"",
+		"import":{
+			"patterns": [
+			{
+				"begin": "\\b(?<!\\.)(load|include)\\b",
+				"end": "$",
+				"beginCaptures":{
+					"1": {"name": "keyword.control.import.freefem"}
+				},
+				"patterns": [
+					{
+						"include": "#expression"
+					}
+				]
+			}
+			]
+		},
+		"function-declaration": {
 			"patterns": [
 				{
-					"name": "constant.character.escape.freefem",
-					"match": "\\\\."
+					"include": "#function-declaration-multi-lines"
+				},
+				{
+					"include": "#function-declaration-single-line"
+				}
+			]
+		},
+		"function-declaration-multi-lines":{
+			"name": "meta.function.freefem",
+			"begin": "(?x)  \\s* \\b(func)\\s+ ([[:alpha:]_][[:word:]]*) \\s+  ([[:alpha:]_][[:word:]]* \\s* )(?=\\()",
+			"end": "(\\})",
+			"beginCaptures": {
+				"1": {
+					"name": "storage.type.function.freefem"
+				},
+				"2": {
+					"name": "support.type.freefem"
+				},
+				"3": {
+					"name": "entity.name.function.freefem"
+				}
+			},
+			"endCaptures": {
+				"1": {
+					"name": "punctuation.section.function.end.freefem"
+				}
+			},
+			"patterns": [
+				{
+					"include": "#builtin-types"
+				},
+				{
+					"include": "#parameters"
+				},
+				{
+					"include": "#function-body"
+				}
+			]
+		},
+		"function-declaration-single-line":{
+			"name": "meta.function.freefem",
+			"begin": "(?x)  \\s* \\b(func)\\s+ ([[:alpha:]_][[:word:]]* \\s* )(=)",
+			"end": "(;)",
+			"beginCaptures": {
+				"1": {
+					"name": "storage.type.function.freefem"
+				},
+				"2": {
+					"name": "entity.name.function.freefem"
+				},
+				"3": {
+					"name": "keyword.operator.definition.function.freefem"
+				}
+			},
+			"endCaptures": {
+				"1": {
+					"name": "punctuation.section.function.end.freefem"
+				}
+			},
+			"patterns": [
+				{
+					"include": "$self"
+				}
+			]
+		},
+		"parameters": {
+			"name": "meta.function.parameters.freefem",
+			"begin": "(\\()",
+			"end": "(\\))",
+			"beginCaptures": {
+				"1": {
+					"name": "punctuation.definition.parameters.begin.freefem"
+				}
+			},
+			"endCaptures": {
+				"1": {
+					"name": "punctuation.definition.parameters.end.freefem"
+				}
+			},
+			"patterns": [
+				{
+					"include": "#builtin-types"
+				},
+				{
+					"name": "keyword.operator.unpacking.parameter.freefem",
+					"match": "(\\*\\*|\\*)"
+				}
+			]
+		},
+		"function-body": {
+			"name": "meta.function.body.freefem",
+			"begin": "(\\{)",
+			"end": "(?=\\})",
+			"beginCaptures": {
+				"1": {
+					"name": "punctuation.definition.parameters.begin.freefem"
+				}
+			},
+			"patterns": [
+				{
+					"include": "$self"
+				},
+				{
+					"name": "keyword.operator.unpacking.parameter.freefem",
+					"match": "(\\*\\*|\\*)"
+				}
+			]
+		},
+		"assignment-operator":{
+			"name": "keyword.operator.assignment.freefem",
+			"match": "(?x)<<= | >>= | //= | \\*\\*=| \\+= | -= | /= | @=| \\*= | %= | ~= | \\^= | &= | \\|=| =(?!=)"
+		},
+		"semicolon": {
+			"patterns": [
+				{
+					"name": "punctuation.terminator.statement.freefem",
+					"match": "\\;$"
+				}
+			]
+		},
+		"expression":{
+			"comment": "All valid FreeFEM expressions",
+			"patterns": [
+			{
+				"include": "#expression-base"
+			},
+			{
+				"include": "#member-access"
+			}
+			]
+		},
+		"member-access": {
+			"name": "meta.member.access.freefem",
+			"begin": "(\\.)\\s*(?!\\.)",
+			"end": "(?x)\n  # stop when you've just read non-whitespace followed by non-word\n  # i.e. when finished reading an identifier or function call\n  (?<=\\S)(?=\\W) |\n  # stop when seeing the start of something that's not a word,\n  # i.e. when seeing a non-identifier\n  (^|(?<=\\s))(?=[^\\\\\\w\\s]) |\n  $\n",
+			"beginCaptures": {
+				"1": {
+					"name": "punctuation.separator.period.freefem"
+				}
+			},
+			"patterns": [
+				{
+					"include": "#function-call"
+				},
+				{
+					"include": "#builtin-member-access"
+				}
+			]
+		},
+		"expression-base":{
+			"comment": "valid FreeFEM expressions with comments and line continuation",
+			"patterns": [
+				{
+					"include": "#comments"
+				},
+				{
+					"include": "#expression-bare"
+				},
+				{
+					"include": "#line-continuation"
 				}
 			]
 		},
@@ -63,94 +234,328 @@
 				}
 			]
 		},
-		"constant": {
+		"expression-bare":{
+			"comment": "valid FreeFEM expressions w/o comments and line continuation",
+			"patterns": [
+			{
+				"include": "#backticks"
+			},
+			{
+				"include": "#illegal-anno"
+			},
+			{
+				"include": "#literal"
+			},
+			{
+				"include": "#regexp"
+			},
+			{
+				"include": "#string"
+			},
+			{
+				"include": "#lambda"
+			},
+			{
+				"include": "#illegal-operator"
+			},
+			{
+				"include": "#operator"
+			},
+			{
+				"include": "#curly-braces"
+			},
+			{
+				"include": "#item-access"
+			},
+			{
+				"include": "#list"
+			},
+			{
+				"include": "#round-braces"
+			},
+			{
+				"include": "#function-call"
+			},
+			{
+				"include": "#builtin-functions"
+			},
+			{
+				"include": "#builtin-types"
+			},
+			{
+				"include": "#builtin-exceptions"
+			},
+			{
+				"include": "#magic-names"
+			},
+			{
+				"include": "#special-names"
+			},
+			{
+				"include": "#illegal-names"
+			},
+			{
+				"include": "#special-variables"
+			},
+			{
+				"include": "#ellipsis"
+			},
+			{
+				"include": "#punctuation"
+			}
+			]
+		},
+		"literal":{
 			"patterns": [
 				{
-					"match": "\\b(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((E|e)(\\+|-)?[0-9]+)?\\b",
-					"name": "constant.numeric.freefem"
+					"name": "constant.language.freefem",
+					"match": "\\b(True|False|None|pi)\\b"
 				},
 				{
-					"match": "\\b(1i|ENDIFMACRO|include|IFMACRO|adj|append|area|ARGV|be|binary|BoundaryEdge|bordermeasure|CG|Cholesky|cin|cout|Crout|default|diag|edgeOrientation|endl|false|ffind|FILE|find|fixed|flush|GMRES|good|hTriangle|im|imax|imin|InternalEdge|l1|l2|label|lenEdge|length|LINE|linfty|LU|m|max|measure|min|mpiAnySource|mpiBAND|mpiBXOR|mpiCommWorld|mpiLAND|mpiLOR|mpiLXOR|mpiMAX|mpiMIN|mpiPROD|mpirank|mpisize|mpiSUM|mpiUndefined|N|nbe|ndof|ndofK|noshowbase|noshowpos|notaregion|nt|nTonEdge|nuEdge|nuTriangle|nv|P|pi|precision|qf1pE|qf1pElump|qf1pT|qf1pTlump|qfV1|qfV1lump|qf2pE|qf2pT|qf2pT4P1|qfV2|qf3pE|qf4pE|qf5pE|qf5pT|qfV5|qf7pT|qf9pT|qfnbpE|quantile|re|rfind|scientific|searchMethod|setw|showbase|showpos|sparsesolver|sum|tellp|true|UMFPACK|unused|whoinElement|verbosity|version|volume|A|A1|abserror|absolute|aniso|aspectratio|B1|bb|beginend|bin|boundary|bw|close|coef|composante|cutoff|datafilename|dataname|distmax|displacement|doptions|dparams|eps|err|errg|facemerge|facetcl|factorize|file|fixedborder|flabel|flags|floatmesh|floatsol|fregion|gradation|grey|hmax|hmin|holelist|hsv|inquire|inside|IsMetric|iso|ivalue|keepbackvertices|label|labeldown|labelmid|labelup|levelset|loptions|lparams|maxit|maxsubdiv|meditff|mem|memory|metric|mode|nbarrow|nbiter|nbjacoby|nboffacetcl|nbofholes|nbofregions|nbregul|nbsmooth|nbvx|ncv|nev|nomeshgeneration|normalization|omega|op|optimize|option|options|order|orientation|periodic|power|precon|prev|ps|ptmerge|qfe|qforder|qft|qfV|ratio|rawvector|reffacelow|reffacemid|reffaceup|refnum|reftet|reftri|regionlist|renumv|rescaling|ridgeangle|save|sigma|sizeofvolume|smoothing|solver|sparams|split|splitin2|splitpbedge|stop|strategy|swap|switch|sym|tgv|thetamax|tol|tolpivot|tolpivotsym|transfo|U2Vc|varrow|vector|veps|viso|wait|withsurfacemesh|WindowIndex|which|zbound)\\b",
-					"name": "constant.language.freefem"
+					"match": "\\b((?:(?:[0-9]+\\.?[0-9]*)|(?:\\.[0-9]+))(?:(?:E|e)(?:\\+|-)?[0-9]+)?)(j)?\\b",
+					"name": "constant.numeric.freefem",
+					"captures": {
+						"2":{"name":"storage.type.imaginary.number.freefem"}
+					}
 				}
 			]
 		},
-		"storage": {
+		"string": {
+			"name": "string.quoted.double.freefem",
+			"begin": "\"",
+			"end": "\"|((?<!\\\\)\\n)",
+			"beginCaptures":{
+				"1": {"name": "punctuation.definition.string.begin.freefem"}
+			},
+			"endCaptures":{
+				"1":{"name": "punctuation.definition.string.end.freefem"}
+			}
+		},
+		"operator":{
+		"match": "(?x)\\b(?<!\\.)(?:(!|&&|\\|\\||\\?)(?# 1)|(for | if | else | return | try | while | break | catch | continue)  (?# 2))(?!\\s*:)\\b| (<< | >> | \\^)(?# 3)| (\\*\\* | \\* | \\+ | - | % | / | \\+\\+ | --)(?# 4)| (!= | == | >= | <= | < | >)(?# 5)",
+		"captures":{
+			"1":{"name": "keyword.operator.logical.freefem"},
+			"2":{"name": "keyword.control.flow.freefem"},
+			"3":{"name": "keyword.operator.bitwise.freefem"},
+			"4":{"name": "keyword.operator.arithmetic.freefem"},
+			"5":{"name": "keyword.operator.comparison.freefem"}
+			}
+		},
+		"list":{
+			"begin": "\\[",
+			"end": "\\]",
+			"beginCaptures":{
+				"0": {"name": "punctuation.definition.list.begin.freefem"}
+			},
+			"endCaptures":{
+				"0":{"name": "punctuation.definition.list.end.freefem"}
+			},
 			"patterns": [
 				{
-					"match": "\\b(bool|complex|dmatrix|fespace|func|gslspline|ifstream|int|macro|matrix|mesh|mesh3|meshS|meshL|mpiComm|mpiGroup|mpiRequest|NewMacro|EndMacro|ofstream|Pmmap|problem|Psemaphore|real|solve|string|varf)\\b",
-					"name": "storage.type.freefem"
+					"include": "#expression"
 				},
 				{
-					"begin": "(border|curve3)\\s",
-					"end": "\\}",
-					"beginCaptures": {
-						"1":{"name":"storage.type.geometry.freefem"}
-					},
-					"patterns": [
-						{
-							"match": "(t|x|y|z)=",
-							"captures": {
-								"1":{"name":"constant.language"}
-							}
-						},
-						{
-							"include": "$self"
- 						}
-					]
+					"include": "#builtin-parameters"
 				}
 			]
 		},
-		"support": {
+		"round-braces":{
+			"begin": "\\(",
+			"end": "\\)",
+			"beginCaptures":{
+			"0": {"name": "punctuation.parenthesis.begin.freefem"}
+			},
+			"endCaptures":{
+				"0": {"name": "punctuation.parenthesis.end.freefem"}
+			},
 			"patterns": [
 				{
-					"begin": "\\b(abs|acos|acosh|adaptmesh|adj|AffineCG|AffineGMRES|arg|asin|asinh|assert|atan|atan2|atanh|atof|atoi|BFGS|broadcast|buildlayers|buildmesh|ceil|chi|complexEigenValue|copysign|change|checkmovemesh|clock|cmaes|conj|convect|cos|cosh|cube|d|dd|dfft|diffnp|diffpos|dimKrylov|dist|dumptable|dx|dxx|dxy|dxz|dy|dyx|dyy|dyz|dz|dzx|dzy|dzz|EigenValue|emptymesh|erf|erfc|exec|exit|exp|fdim|floor|fmax|fmin|fmod|freeyams|getARGV|getline|gmshload|gmshload3|gslcdfugaussianP|gslcdfugaussianQ|gslcdfugaussianPinv|gslcdfugaussianQinv|gslcdfgaussianP|gslcdfgaussianQ|gslcdfgaussianPinv|gslcdfgaussianQinv|gslcdfgammaP|gslcdfgammaQ|gslcdfgammaPinv|gslcdfgammaQinv|gslcdfcauchyP|gslcdfcauchyQ|gslcdfcauchyPinv|gslcdfcauchyQinv|gslcdflaplaceP|gslcdflaplaceQ|gslcdflaplacePinv|gslcdflaplaceQinv|gslcdfrayleighP|gslcdfrayleighQ|gslcdfrayleighPinv|gslcdfrayleighQinv|gslcdfchisqP|gslcdfchisqQ|gslcdfchisqPinv|gslcdfchisqQinv|gslcdfexponentialP|gslcdfexponentialQ|gslcdfexponentialPinv|gslcdfexponentialQinv|gslcdfexppowP|gslcdfexppowQ|gslcdftdistP|gslcdftdistQ|gslcdftdistPinv|gslcdftdistQinv|gslcdffdistP|gslcdffdistQ|gslcdffdistPinv|gslcdffdistQinv|gslcdfbetaP|gslcdfbetaQ|gslcdfbetaPinv|gslcdfbetaQinv|gslcdfflatP|gslcdfflatQ|gslcdfflatPinv|gslcdfflatQinv|gslcdflognormalP|gslcdflognormalQ|gslcdflognormalPinv|gslcdflognormalQinv|gslcdfgumbel1P|gslcdfgumbel1Q|gslcdfgumbel1Pinv|gslcdfgumbel1Qinv|gslcdfgumbel2P|gslcdfgumbel2Q|gslcdfgumbel2Pinv|gslcdfgumbel2Qinv|gslcdfweibullP|gslcdfweibullQ|gslcdfweibullPinv|gslcdfweibullQinv|gslcdfparetoP|gslcdfparetoQ|gslcdfparetoPinv|gslcdfparetoQinv|gslcdflogisticP|gslcdflogisticQ|gslcdflogisticPinv|gslcdflogisticQinv|gslcdfbinomialP|gslcdfbinomialQ|gslcdfpoissonP|gslcdfpoissonQ|gslcdfgeometricP|gslcdfgeometricQ|gslcdfnegativebinomialP|gslcdfnegativebinomialQ|gslcdfpascalP|gslcdfpascalQ|gslinterpakima|gslinterpakimaperiodic|gslinterpcsplineperiodic|gslinterpcspline|gslinterpsteffen|gslinterplinear|gslinterppolynomial|gslranbernoullipdf|gslranbeta|gslranbetapdf|gslranbinomialpdf|gslranexponential|gslranexponentialpdf|gslranexppow|gslranexppowpdf|gslrancauchy|gslrancauchypdf|gslranchisq|gslranchisqpdf|gslranerlang|gslranerlangpdf|gslranfdist|gslranfdistpdf|gslranflat|gslranflatpdf|gslrangamma|gslrangammaint|gslrangammapdf|gslrangammamt|gslrangammaknuth|gslrangaussian|gslrangaussianratiomethod|gslrangaussianziggurat|gslrangaussianpdf|gslranugaussian|gslranugaussianratiomethod|gslranugaussianpdf|gslrangaussiantail|gslrangaussiantailpdf|gslranugaussiantail|gslranugaussiantailpdf|gslranlandau|gslranlandaupdf|gslrangeometricpdf|gslrangumbel1|gslrangumbel1pdf|gslrangumbel2|gslrangumbel2pdf|gslranlogistic|gslranlogisticpdf|gslranlognormal|gslranlognormalpdf|gslranlogarithmicpdf|gslrannegativebinomialpdf|gslranpascalpdf|gslranpareto|gslranparetopdf|gslranpoissonpdf|gslranrayleigh|gslranrayleighpdf|gslranrayleightail|gslranrayleightailpdf|gslrantdist|gslrantdistpdf|gslranlaplace|gslranlaplacepdf|gslranlevy|gslranweibull|gslranweibullpdf|gslsfairyAi|gslsfairyBi|gslsfairyAiscaled|gslsfairyBiscaled|gslsfairyAideriv|gslsfairyBideriv|gslsfairyAiderivscaled|gslsfairyBiderivscaled|gslsfairyzeroAi|gslsfairyzeroBi|gslsfairyzeroAideriv|gslsfairyzeroBideriv|gslsfbesselJ0|gslsfbesselJ1|gslsfbesselJn|gslsfbesselY0|gslsfbesselY1|gslsfbesselYn|gslsfbesselI0|gslsfbesselI1|gslsfbesselIn|gslsfbesselI0scaled|gslsfbesselI1scaled|gslsfbesselInscaled|gslsfbesselK0|gslsfbesselK1|gslsfbesselKn|gslsfbesselK0scaled|gslsfbesselK1scaled|gslsfbesselKnscaled|gslsfbesselj0|gslsfbesselj1|gslsfbesselj2|gslsfbesseljl|gslsfbessely0|gslsfbessely1|gslsfbessely2|gslsfbesselyl|gslsfbesseli0scaled|gslsfbesseli1scaled|gslsfbesseli2scaled|gslsfbesselilscaled|gslsfbesselk0scaled|gslsfbesselk1scaled|gslsfbesselk2scaled|gslsfbesselklscaled|gslsfbesselJnu|gslsfbesselYnu|gslsfbesselInuscaled|gslsfbesselInu|gslsfbesselKnuscaled|gslsfbesselKnu|gslsfbessellnKnu|gslsfbesselzeroJ0|gslsfbesselzeroJ1|gslsfbesselzeroJnu|gslsfclausen|gslsfhydrogenicR1|gslsfdawson|gslsfdebye1|gslsfdebye2|gslsfdebye3|gslsfdebye4|gslsfdebye5|gslsfdebye6|gslsfdilog|gslsfmultiply|gslsfellintKcomp|gslsfellintEcomp|gslsfellintPcomp|gslsfellintDcomp|gslsfellintF|gslsfellintE|gslsfellintRC|gslsferfc|gslsflogerfc|gslsferf|gslsferfZ|gslsferfQ|gslsfhazard|gslsfexp|gslsfexpmult|gslsfexpm1|gslsfexprel|gslsfexprel2|gslsfexpreln|gslsfexpintE1|gslsfexpintE2|gslsfexpintEn|gslsfexpintE1scaled|gslsfexpintE2scaled|gslsfexpintEnscaled|gslsfexpintEi|gslsfexpintEiscaled|gslsfShi|gslsfChi|gslsfexpint3|gslsfSi|gslsfCi|gslsfatanint|gslsffermidiracm1|gslsffermidirac0|gslsffermidirac1|gslsffermidirac2|gslsffermidiracint|gslsffermidiracmhalf|gslsffermidirachalf|gslsffermidirac3half|gslsffermidiracinc0|gslsflngamma|gslsfgamma|gslsfgammastar|gslsfgammainv|gslsftaylorcoeff|gslsffact|gslsfdoublefact|gslsflnfact|gslsflndoublefact|gslsflnchoose|gslsfchoose|gslsflnpoch|gslsfpoch|gslsfpochrel|gslsfgammaincQ|gslsfgammaincP|gslsfgammainc|gslsflnbeta|gslsfbeta|gslsfbetainc|gslsfgegenpoly1|gslsfgegenpoly2|gslsfgegenpoly3|gslsfgegenpolyn|gslsfhyperg0F1|gslsfhyperg1F1int|gslsfhyperg1F1|gslsfhypergUint|gslsfhypergU|gslsfhyperg2F0|gslsflaguerre1|gslsflaguerre2|gslsflaguerre3|gslsflaguerren|gslsflambertW0|gslsflambertWm1|gslsflegendrePl|gslsflegendreP1|gslsflegendreP2|gslsflegendreP3|gslsflegendreQ0|gslsflegendreQ1|gslsflegendreQl|gslsflegendrePlm|gslsflegendresphPlm|gslsflegendrearraysize|gslsfconicalPhalf|gslsfconicalPmhalf|gslsfconicalP0|gslsfconicalP1|gslsfconicalPsphreg|gslsfconicalPcylreg|gslsflegendreH3d0|gslsflegendreH3d1|gslsflegendreH3d|gslsflog|gslsflogabs|gslsflog1plusx|gslsflog1plusxmx|gslsfpowint|gslsfpsiint|gslsfpsi|gslsfpsi1piy|gslsfpsi1int|gslsfpsi1|gslsfpsin|gslsfsynchrotron1|gslsfsynchrotron2|gslsftransport2|gslsftransport3|gslsftransport4|gslsftransport5|gslsfsin|gslsfcos|gslsfhypot|gslsfsinc|gslsflnsinh|gslsflncosh|gslsfanglerestrictsymm|gslsfanglerestrictpos|gslsfzetaint|gslsfzeta|gslsfzetam1|gslsfzetam1int|gslsfhzeta|gslsfetaint|gslsfeta|imag|intalledges|intallfaces|interpolate|invdiff|invdiffnp|invdiffpos|Isend|isInf|isNaN|isoline|Irecv|j0|j1|jn|jump|lgamma|LinearCG|LinearGMRES|log|log10|lrint|lround|max|mean|medit|min|mmg3d|movemesh|movemesh23|mpiAlltoall|mpiAlltoallv|mpiAllgather|mpiAllgatherv|mpiAllReduce|mpiBarrier|mpiGather|mpiGatherv|mpiRank|mpiReduce|mpiScatter|mpiScatterv|mpiSize|mpiWait|mpiWaitAny|mpiWtick|mpiWtime|mshmet|NaN|NLCG|on|plot|polar|Post|pow|processor|processorblock|projection|randinit|randint31|randint32|random|randreal1|randreal2|randreal3|randres53|Read|readmesh|readmesh3|Recv|rint|round|savemesh|savesol|savevtk|seekg|Sent|set|sign|signbit|sin|sinh|sort|splitComm|splitmesh|sqrt|square|srandom|srandomdev|Stringification|swap|system|tan|tanh|tellg|tetg|tetgconvexhull|tetgreconstruction|tetgtransfo|tgamma|triangulate|trunc|Wait|Write|y0|y1|yn|square3)\\(",
-					"end": "\\);",
-					"patterns":[
-						{
-							"match": "(dim|fill|value|nbiso|t|eta|epsilon|minclustersize|maxblocksize|cmm|region|init)\\s*(={1,2})",
-							"captures": {
-								"1" :{"name":"variable.parameter.freefem"}
-							}
-						},
-						{
-							"include": "$self"
- 						}
-					],
-					"beginCaptures": {
-						"1" :{"name": "support.function.freefem"}
+					"include": "$self"
+				}
+			]
+		},
+		"curly-braces": {
+			"begin": "\\{",
+			"end": "\\}",
+			"beginCaptures": {
+				"0": {
+					"name": "punctuation.definition.dict.begin.freefem"
+				}
+			},
+			"endCaptures": {
+				"0": {
+					"name": "punctuation.definition.dict.end.freefem"
+				}
+			},
+			"patterns": [
+				{
+					"include": "$self"
+				}
+			]
+		},
+		"function-call": {
+			"name": "meta.function-call.freefem",
+			"begin": "(?x)\n  \\b(?=\n    ([[:alpha:]_]\\w*) \\s* (\\()\n  )\n",
+			"end": "(\\))",
+			"endCaptures": {
+				"1": {
+					"name": "punctuation.definition.arguments.end.freefem"
+				}
+			},
+			"patterns": [
+				{
+					"include": "#special-variables"
+				},
+				{
+					"include": "#function-name"
+				},
+				{
+					"include": "#function-arguments"
+				}
+			]
+		},
+		"function-name": {
+			"patterns": [
+				{
+					"include": "#builtin-possible-callables"
+				},
+				{
+					"comment": "Some color schemas support meta.function-call.generic scope",
+					"name": "meta.function-call.generic.freefem",
+					"match": "(?x)\n  \\b ([[:alpha:]_]\\w*) \\b\n"
+				}
+			]
+		},
+		"function-arguments": {
+			"begin": "(\\()",
+			"end": "(?=\\))(?!\\)\\s*\\()",
+			"beginCaptures": {
+				"1": {
+					"name": "punctuation.definition.arguments.begin.freefem"
+				}
+			},
+			"contentName": "meta.function-call.arguments.freefem",
+			"patterns": [
+				{
+					"name": "punctuation.separator.arguments.freefem",
+					"match": "(,)"
+				},
+				{
+					"match": "(?x)\n  (?:(?<=[,(])|^) \\s* (\\*{1,2})\n",
+					"captures": {
+						"1": {
+							"name": "keyword.operator.unpacking.arguments.freefem"
+						}
 					}
 				},
 				{
-					"match": "(int\\dd)(\\(.*?\\))(\\((?:[^)(]+|\\((?:[^)(]+|\\([^)(]*\\))*\\))*\\))",
+					"include": "#builtin-parameters"
+				},
+				{
+					"name": "keyword.operator.assignment.freefem",
+					"match": "=(?!=)"
+				},
+				{
+					"include": "#expression"
+				},
+				{
+					"match": "\\s*(\\))\\s*(\\()",
 					"captures": {
-						"1":{"name": "support.function.freefem"},
-						"2":
-						{
-							"name":"meta.function.call.int.freefem",
-							"patterns": [
-								{
-									"include": "$self"
-								}
-							]
+						"1": {
+							"name": "punctuation.definition.arguments.end.freefem"
 						},
-						"3":
-						{
-							"name":"meta.function.call.int.freefem",
-							"patterns": [
-								{									"match": "(?<!\\w)(x|y|dx|dy)(?!\\w)",
-									"captures": {
-										"1" :{"name":"variable.parameter.freefem"}
-									}
-								},
-								{
-									"include": "$self"
-								}
-							]
+						"2": {
+							"name": "punctuation.definition.arguments.begin.freefem"
 						}
 					}
 				}
 			]
+		},
+		"builtin-possible-callables": {
+			"patterns": [
+				{
+					"include": "#builtin-functions"
+				},
+				{
+					"include": "#builtin-types"
+				}
+			]
+		},
+		"builtin-functions": {
+			"patterns": [
+				{
+					"name": "support.function.builtin.freefem",
+					"match": "(?x)  (?<!\\.) \\b(?:(abs|acos|acosh|asin|asinh|atan|atan2|atanh|atof|atoi|ceil|imag|cos|cosh|conj|sin|sinh|max|mean|min|tan|tanh|sqrt|exp|log|log10|pow|dx|dxx|dy|dyy|dz|dzz|dxy|dxz|dyx|dyz|dzx|dzy|EigenValue|complexEigenValue) (?# 1) | (int1d|int2d|int3d|on)(?# 2)| (gslcdfugaussianP|gslcdfugaussianQ|gslcdfugaussianPinv|gslcdfugaussianQinv|gslcdfgaussianP|gslcdfgaussianQ|gslcdfgaussianPinv|gslcdfgaussianQinv|gslcdfgammaP|gslcdfgammaQ|gslcdfgammaPinv|gslcdfgammaQinv|gslcdfcauchyP|gslcdfcauchyQ|gslcdfcauchyPinv|gslcdfcauchyQinv|gslcdflaplaceP|gslcdflaplaceQ|gslcdflaplacePinv|gslcdflaplaceQinv|gslcdfrayleighP|gslcdfrayleighQ|gslcdfrayleighPinv|gslcdfrayleighQinv|gslcdfchisqP|gslcdfchisqQ|gslcdfchisqPinv|gslcdfchisqQinv|gslcdfexponentialP|gslcdfexponentialQ|gslcdfexponentialPinv|gslcdfexponentialQinv|gslcdfexppowP|gslcdfexppowQ|gslcdftdistP|gslcdftdistQ|gslcdftdistPinv|gslcdftdistQinv|gslcdffdistP|gslcdffdistQ|gslcdffdistPinv|gslcdffdistQinv|gslcdfbetaP|gslcdfbetaQ|gslcdfbetaPinv|gslcdfbetaQinv|gslcdfflatP|gslcdfflatQ|gslcdfflatPinv|gslcdfflatQinv|gslcdflognormalP|gslcdflognormalQ|gslcdflognormalPinv|gslcdflognormalQinv|gslcdfgumbel1P|gslcdfgumbel1Q|gslcdfgumbel1Pinv|gslcdfgumbel1Qinv|gslcdfgumbel2P|gslcdfgumbel2Q|gslcdfgumbel2Pinv|gslcdfgumbel2Qinv|gslcdfweibullP|gslcdfweibullQ|gslcdfweibullPinv|gslcdfweibullQinv|gslcdfparetoP|gslcdfparetoQ|gslcdfparetoPinv|gslcdfparetoQinv|gslcdflogisticP|gslcdflogisticQ|gslcdflogisticPinv|gslcdflogisticQinv|gslcdfbinomialP|gslcdfbinomialQ|gslcdfpoissonP|gslcdfpoissonQ|gslcdfgeometricP|gslcdfgeometricQ|gslcdfnegativebinomialP|gslcdfnegativebinomialQ|gslcdfpascalP|gslcdfpascalQ|gslinterpakima|gslinterpakimaperiodic|gslinterpcsplineperiodic|gslinterpcspline|gslinterpsteffen|gslinterplinear|gslinterppolynomial|gslranbernoullipdf|gslranbeta|gslranbetapdf|gslranbinomialpdf|gslranexponential|gslranexponentialpdf|gslranexppow|gslranexppowpdf|gslrancauchy|gslrancauchypdf|gslranchisq|gslranchisqpdf|gslranerlang|gslranerlangpdf|gslranfdist|gslranfdistpdf|gslranflat|gslranflatpdf|gslrangamma|gslrangammaint|gslrangammapdf|gslrangammamt|gslrangammaknuth|gslrangaussian|gslrangaussianratiomethod|gslrangaussianziggurat|gslrangaussianpdf|gslranugaussian|gslranugaussianratiomethod|gslranugaussianpdf|gslrangaussiantail|gslrangaussiantailpdf|gslranugaussiantail|gslranugaussiantailpdf|gslranlandau|gslranlandaupdf|gslrangeometricpdf|gslrangumbel1|gslrangumbel1pdf|gslrangumbel2|gslrangumbel2pdf|gslranlogistic|gslranlogisticpdf|gslranlognormal|gslranlognormalpdf|gslranlogarithmicpdf|gslrannegativebinomialpdf|gslranpascalpdf|gslranpareto|gslranparetopdf|gslranpoissonpdf|gslranrayleigh|gslranrayleighpdf|gslranrayleightail|gslranrayleightailpdf|gslrantdist|gslrantdistpdf|gslranlaplace|gslranlaplacepdf|gslranlevy|gslranweibull|gslranweibullpdf|gslsfairyAi|gslsfairyBi|gslsfairyAiscaled|gslsfairyBiscaled|gslsfairyAideriv|gslsfairyBideriv|gslsfairyAiderivscaled|gslsfairyBiderivscaled|gslsfairyzeroAi|gslsfairyzeroBi|gslsfairyzeroAideriv|gslsfairyzeroBideriv|gslsfbesselJ0|gslsfbesselJ1|gslsfbesselJn|gslsfbesselY0|gslsfbesselY1|gslsfbesselYn|gslsfbesselI0|gslsfbesselI1|gslsfbesselIn|gslsfbesselI0scaled|gslsfbesselI1scaled|gslsfbesselInscaled|gslsfbesselK0|gslsfbesselK1|gslsfbesselKn|gslsfbesselK0scaled|gslsfbesselK1scaled|gslsfbesselKnscaled|gslsfbesselj0|gslsfbesselj1|gslsfbesselj2|gslsfbesseljl|gslsfbessely0|gslsfbessely1|gslsfbessely2|gslsfbesselyl|gslsfbesseli0scaled|gslsfbesseli1scaled|gslsfbesseli2scaled|gslsfbesselilscaled|gslsfbesselk0scaled|gslsfbesselk1scaled|gslsfbesselk2scaled|gslsfbesselklscaled|gslsfbesselJnu|gslsfbesselYnu|gslsfbesselInuscaled|gslsfbesselInu|gslsfbesselKnuscaled|gslsfbesselKnu|gslsfbessellnKnu|gslsfbesselzeroJ0|gslsfbesselzeroJ1|gslsfbesselzeroJnu|gslsfclausen|gslsfhydrogenicR1|gslsfdawson|gslsfdebye1|gslsfdebye2|gslsfdebye3|gslsfdebye4|gslsfdebye5|gslsfdebye6|gslsfdilog|gslsfmultiply|gslsfellintKcomp|gslsfellintEcomp|gslsfellintPcomp|gslsfellintDcomp|gslsfellintF|gslsfellintE|gslsfellintRC|gslsferfc|gslsflogerfc|gslsferf|gslsferfZ|gslsferfQ|gslsfhazard|gslsfexp|gslsfexpmult|gslsfexpm1|gslsfexprel|gslsfexprel2|gslsfexpreln|gslsfexpintE1|gslsfexpintE2|gslsfexpintEn|gslsfexpintE1scaled|gslsfexpintE2scaled|gslsfexpintEnscaled|gslsfexpintEi|gslsfexpintEiscaled|gslsfShi|gslsfChi|gslsfexpint3|gslsfSi|gslsfCi|gslsfatanint|gslsffermidiracm1|gslsffermidirac0|gslsffermidirac1|gslsffermidirac2|gslsffermidiracint|gslsffermidiracmhalf|gslsffermidirachalf|gslsffermidirac3half|gslsffermidiracinc0|gslsflngamma|gslsfgamma|gslsfgammastar|gslsfgammainv|gslsftaylorcoeff|gslsffact|gslsfdoublefact|gslsflnfact|gslsflndoublefact|gslsflnchoose|gslsfchoose|gslsflnpoch|gslsfpoch|gslsfpochrel|gslsfgammaincQ|gslsfgammaincP|gslsfgammainc|gslsflnbeta|gslsfbeta|gslsfbetainc|gslsfgegenpoly1|gslsfgegenpoly2|gslsfgegenpoly3|gslsfgegenpolyn|gslsfhyperg0F1|gslsfhyperg1F1int|gslsfhyperg1F1|gslsfhypergUint|gslsfhypergU|gslsfhyperg2F0|gslsflaguerre1|gslsflaguerre2|gslsflaguerre3|gslsflaguerren|gslsflambertW0|gslsflambertWm1|gslsflegendrePl|gslsflegendreP1|gslsflegendreP2|gslsflegendreP3|gslsflegendreQ0|gslsflegendreQ1|gslsflegendreQl|gslsflegendrePlm|gslsflegendresphPlm|gslsflegendrearraysize|gslsfconicalPhalf|gslsfconicalPmhalf|gslsfconicalP0|gslsfconicalP1|gslsfconicalPsphreg|gslsfconicalPcylreg|gslsflegendreH3d0|gslsflegendreH3d1|gslsflegendreH3d|gslsflog|gslsflogabs|gslsflog1plusx|gslsflog1plusxmx|gslsfpowint|gslsfpsiint|gslsfpsi|gslsfpsi1piy|gslsfpsi1int|gslsfpsi1|gslsfpsin|gslsfsynchrotron1|gslsfsynchrotron2|gslsftransport2|gslsftransport3|gslsftransport4|gslsftransport5|gslsfsin|gslsfcos|gslsfhypot|gslsfsinc|gslsflnsinh|gslsflncosh|gslsfanglerestrictsymm|gslsfanglerestrictpos|gslsfzetaint|gslsfzeta|gslsfzetam1|gslsfzetam1int|gslsfhzeta|gslsfetaint|gslsfeta)(?# 3) | (adaptmesh|gmshload|gmshload3|buildmesh|square|square3|readmesh|readmesh3|cube|movemesh|movemesh23) (?# 4) | (mpiAlltoall|mpiAlltoallv|mpiAllgather|mpiAllgatherv|mpiAllReduce|mpiBarrier|mpiGather|mpiGatherv|mpiReduce|mpiScatter|mpiScatterv|mpiSize|mpiWait|mpiWaitAny|mpiWtick|mpiWtime|mpiRank) (?# 5)| (clock|plot|getARGV) (?# 6)| (BFGS|AffineCG|AffineGMRES|LinearCG|LinearGMRES) (?# 7) | (randinit|randint31|randint32|random|randreal1|randreal2|randreal3|randres53|srandom|srandomdev) (?# 8))\\b",
+					"captures": {
+						"1":{"name": "support.function.builtin.math.freefem"},
+						"2":{"name": "support.function.builtin.integral.freefem"},
+						"3":{"name": "support.function.builtin.gsl.freefem"},
+						"4":{"name": "support.function.builtin.mesh.freefem"},
+						"5":{"name": "support.function.builtin.mpi.freefem"},
+						"6":{"name": "support.function.builtin.utils.freefem"},
+						"7":{"name": "support.function.builtin.solver.freefem"},
+						"8":{"name": "support.function.builtin.rand.freefem"}
+					}
+				},
+				{
+					"name": "support.function.builtin.member-access.freefem",
+					"match": "(?x) \\b(be)\\b"
+				}
+			]
+		},
+		"builtin-types": {
+			"match": "(?x)  (?<!\\.) \\b(?:(bool | complex | int | string | real | matrix | dmatrix) (?# 1) | (gslspline) (?# 2) | (mesh|mesh3|meshS|meshL) (?# 3) | (mpiComm|mpiGroup|mpiRequest) (?# 4) | (ifstream | ofstream) (?# 5) | (solve | varf |  problem | fespace) (?# 6))\\b",
+			"captures": {
+				"1":{"name": "support.type.math.freefem"},
+				"2":{"name": "support.type.gsl.freefem"},
+				"3":{"name": "support.type.mesh.freefem"},
+				"4":{"name": "support.type.mpi.freefem"},
+				"5":{"name": "support.type.utils.freefem"},
+				"6":{"name": "support.type.problem.freefem"}
+			}
+		},
+		"builtin-parameters":{
+			"match": "\\b(dim|cmm|solver|t|fill|value|nbiso|veps|precon|eps|eta|nbiter|stop|label|region|nev|sym|tol|ivalue|vector|sigma|wait|tgv|boundary|aspectratio|ps|viso|coef|varrow|nbarrow|WindowIndex|prev|hsv|grey|bb|bw|qfe|qforder|qft|qfV|order)\\s*(=)(?!=)",
+			"captures": {
+				"1": {
+					"name": "variable.parameter.function-call.freefem"
+				},
+				"2": {
+					"name": "keyword.operator.assignment.freefem"
+				}
+			}
+		},
+		"builtin-member-access":{
+			"match": "(?x)(x|y|z|nv|nt|nbe)",
+			"captures": {
+				"1": {
+					"name": "variable.parameter.member-access.freefem"
+				}
+			}
+		},
+		"special-variables": {
+			"match": "(?x)\n  \\b (?<!\\.) (?:\n    (x|y|z) | (area|volume|BoundaryEdge|edgeOrientation|hTriangle|InternalEdge|lenEdge|nTonEdge|nuEdge|nuTriangle|N|P)| (ARGV|version|verbosity) |(CG|GMRES|sparsesolver|Cholesky|Crout) | (qf1pE|qf1pElump|qf1pT|qf1pTlump|qfV1|qfV1lump|qf2pE|qf2pT|qf2pT4P1|qfV2|qf3pE|qf4pE|qf5pE|qf5pT|qfV5|qf7pT|qf9pT|qfnbpE)| (mpirank|mpisize|mpiCommWorld|mpiSUM|mpiBXOR|mpiLAND|mpiLOR|mpiLXOR|mpiMAX|mpiMIN|mpiPROD|mpiBAND|mpiUndefined|mpiAnySource) \n  )\\b\n",
+			"captures": {
+				"1": {
+					"name": "variable.language.special.coordinates.python"
+				},
+				"2": {
+					"name": "variable.language.special.mesh.python"
+				},
+				"3": {
+					"name": "variable.language.special.utils.python"
+				},
+				"4": {
+					"name": "variable.language.special.solvers.python"
+				},
+				"5": {
+					"name": "variable.language.special.quadratures.python"
+				}
+				,
+				"7": {
+					"name": "variable.language.special.mpi.python"
+				}
+			}
 		}
 	}
 }
