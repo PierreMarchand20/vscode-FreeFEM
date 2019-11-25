@@ -2,10 +2,17 @@
 
 ## Features
 
-- Syntax highlighting for FreeFEM
+- Syntax highlighting for [FreeFEM](https://freefem.org)
+
+<img src="img/membrane.png" width="70%">
+
 
 ## Release Notes
 
-### 0.0
+### 1.0
 
-Initial release of `vscode-freeFEM`, work in progress...
+Initial release of `vscode-freeFEM`. Most of the syntax highlighting is supported.
+
+## License
+
+MIT

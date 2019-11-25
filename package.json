@@ -1,5 +1,8 @@
 {
     "author": "Pierre Marchand",
+    "bugs": {
+        "url": "https://github.com/PierreMarchand20/vscode-FreeFEM/issues/"
+      },
     "name": "vscode-freefem",
     "displayName": "vscode-FreeFEM",
     "description": "FreeFEM language support in Visual Studio Code",
@@ -36,6 +39,7 @@
             }
         ]
     },
+    "icon": "logos/logo.png",
     "homepage": "https://freefem.org",
     "license": "MIT",
     "publisher": "Pierre-Marchand",
