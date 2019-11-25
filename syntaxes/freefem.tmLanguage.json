@@ -23,6 +23,9 @@
 					"include": "#function-declaration"
 				},
 				{
+					"include": "#macro-declaration"
+				},
+				{
 					"include": "#statement-keyword"
 				},
 				{
@@ -90,7 +93,7 @@
 					"include": "#builtin-types"
 				},
 				{
-					"include": "#parameters"
+					"include": "#arguments"
 				},
 				{
 					"include": "#function-body"
@@ -123,18 +126,18 @@
 				}
 			]
 		},
-		"parameters": {
-			"name": "meta.function.parameters.freefem",
+		"arguments": {
+			"name": "meta.arguments.arguments.freefem",
 			"begin": "(\\()",
 			"end": "(\\))",
 			"beginCaptures": {
 				"1": {
-					"name": "punctuation.definition.parameters.begin.freefem"
+					"name": "punctuation.definition.arguments.begin.freefem"
 				}
 			},
 			"endCaptures": {
 				"1": {
-					"name": "punctuation.definition.parameters.end.freefem"
+					"name": "punctuation.definition.arguments.end.freefem"
 				}
 			},
 			"patterns": [
@@ -153,16 +156,38 @@
 			"end": "(?=\\})",
 			"beginCaptures": {
 				"1": {
-					"name": "punctuation.definition.parameters.begin.freefem"
+					"name": "punctuation.definition.arguments.begin.freefem"
 				}
 			},
 			"patterns": [
 				{
 					"include": "$self"
+				}
+			]
+		},
+		"macro-declaration": {
+			"name": "meta.macro.freefem",
+			"begin": "(?x)  \\s* \\b(macro)\\s+ ([[:alpha:]_][[:word:]]* \\s* )",
+			"end": "(//)",
+			"beginCaptures": {
+				"1": {
+					"name": "storage.type.macro.freefem"
+				},
+				"2": {
+					"name": "entity.name.macro.freefem"
+				}
+			},
+			"endCaptures": {
+				"1": {
+					"name": "punctuation.section.macro.end.freefem"
+				}
+			},
+			"patterns": [
+				{
+					"include": "#arguments"
 				},
 				{
-					"name": "keyword.operator.unpacking.parameter.freefem",
-					"match": "(\\*\\*|\\*)"
+					"include": "$self"
 				}
 			]
 		},
@@ -312,7 +337,7 @@
 					"match": "\\b(True|False|None|pi)\\b"
 				},
 				{
-					"match": "\\b((?:(?:[0-9]+\\.?[0-9]*)|(?:\\.[0-9]+))(?:(?:E|e)(?:\\+|-)?[0-9]+)?)(j)?\\b",
+					"match": "\\b((?:(?:[0-9]+\\.?[0-9]*)|(?:\\.[0-9]+))(?:(?:E|e)(?:\\+|-)?[0-9]+)?)(i)?\\b",
 					"name": "constant.numeric.freefem",
 					"captures": {
 						"2":{"name":"storage.type.imaginary.number.freefem"}
@@ -332,7 +357,7 @@
 			}
 		},
 		"operator":{
-		"match": "(?x)\\b(?<!\\.)(?:(!|&&|\\|\\||\\?)(?# 1)|(for | if | else | return | try | while | break | catch | continue)  (?# 2))(?!\\s*:)\\b| (<< | >> | \\^)(?# 3)| (\\*\\* | \\* | \\+ | - | % | / | \\+\\+ | --)(?# 4)| (!= | == | >= | <= | < | >)(?# 5)",
+		"match": "(?x)\\b(?<!\\.)(?:(!|&&|\\|\\||\\?)(?# 1)|(for | if | else | return | try | while | break | catch | continue | IFMACRO | ENDIFMACRO)  (?# 2))(?!\\s*:)\\b| (<< | >> | \\^)(?# 3)| (\\*\\* | \\* | \\+ | - | % | / | \\+\\+ | --)(?# 4)| (!= | == | >= | <= | < | >)(?# 5)",
 		"captures":{
 			"1":{"name": "keyword.operator.logical.freefem"},
 			"2":{"name": "keyword.control.flow.freefem"},
@@ -388,6 +413,10 @@
 				}
 			},
 			"patterns": [
+				{
+					"match": ";",
+					"name":"punctuation.terminator.statement.freefem"
+				},
 				{
 					"include": "$self"
 				}
@@ -456,7 +485,7 @@
 					"match": "=(?!=)"
 				},
 				{
-					"include": "#expression"
+					"include": "$self"
 				},
 				{
 					"match": "\\s*(\\))\\s*(\\()",
@@ -504,18 +533,19 @@
 			]
 		},
 		"builtin-types": {
-			"match": "(?x)  (?<!\\.) \\b(?:(bool | complex | int | string | real | matrix | dmatrix) (?# 1) | (gslspline) (?# 2) | (mesh|mesh3|meshS|meshL) (?# 3) | (mpiComm|mpiGroup|mpiRequest) (?# 4) | (ifstream | ofstream) (?# 5) | (solve | varf |  problem | fespace) (?# 6))\\b",
+			"match": "(?x)  (?<!\\.) \\b(?:(bool | complex | int | string | real | matrix | dmatrix) (?# 1) | (gslspline) (?# 2) | (mesh|mesh3|meshS|meshL) (?# 3) | (mpiComm|mpiGroup|mpiRequest) (?# 4) | (ifstream | ofstream) (?# 5) | (solve | varf |  problem | fespace) (?# 6) | (border | curve3) (?# 7))\\b",
 			"captures": {
 				"1":{"name": "support.type.math.freefem"},
 				"2":{"name": "support.type.gsl.freefem"},
 				"3":{"name": "support.type.mesh.freefem"},
 				"4":{"name": "support.type.mpi.freefem"},
 				"5":{"name": "support.type.utils.freefem"},
-				"6":{"name": "support.type.problem.freefem"}
+				"6":{"name": "support.type.problem.freefem"},
+				"7":{"name": "support.type.problem.freefem"}
 			}
 		},
 		"builtin-parameters":{
-			"match": "\\b(dim|cmm|solver|t|fill|value|nbiso|veps|precon|eps|eta|nbiter|stop|label|region|nev|sym|tol|ivalue|vector|sigma|wait|tgv|boundary|aspectratio|ps|viso|coef|varrow|nbarrow|WindowIndex|prev|hsv|grey|bb|bw|qfe|qforder|qft|qfV|order)\\s*(=)(?!=)",
+			"match": "\\b(dim|cmm|solver|t|fill|value|nbiso|veps|precon|eps|eta|nbiter|stop|label|region|nev|sym|tol|ivalue|vector|sigma|wait|tgv|boundary|aspectratio|ps|viso|coef|varrow|nbarrow|WindowIndex|prev|hsv|grey|bb|bw|qfe|qforder|qft|qfV|order|epsilon|minclustersize|maxblocksize|alpha|combinedcoef)\\s*(=)(?!=)",
 			"captures": {
 				"1": {
 					"name": "variable.parameter.function-call.freefem"
