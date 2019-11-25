@@ -9,7 +9,7 @@
 
 ## Release Notes
 
-### 1.0
+### 1.0-2.0
 
 Initial release of `vscode-freeFEM`. Most of the syntax highlighting is supported.
 
