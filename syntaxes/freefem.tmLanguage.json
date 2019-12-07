@@ -564,26 +564,28 @@
 			}
 		},
 		"special-variables": {
-			"match": "(?x)\n  \\b (?<!\\.) (?:\n    (x|y|z) | (area|volume|BoundaryEdge|edgeOrientation|hTriangle|InternalEdge|lenEdge|nTonEdge|nuEdge|nuTriangle|N|P)| (ARGV|version|verbosity) |(CG|GMRES|sparsesolver|Cholesky|Crout) | (qf1pE|qf1pElump|qf1pT|qf1pTlump|qfV1|qfV1lump|qf2pE|qf2pT|qf2pT4P1|qfV2|qf3pE|qf4pE|qf5pE|qf5pT|qfV5|qf7pT|qf9pT|qfnbpE)| (mpirank|mpisize|mpiCommWorld|mpiSUM|mpiBXOR|mpiLAND|mpiLOR|mpiLXOR|mpiMAX|mpiMIN|mpiPROD|mpiBAND|mpiUndefined|mpiAnySource) \n  )\\b\n",
+			"match": "(?x)\n  \\b (?<!\\.) (?:\n    (x|y|z) | (area|volume|BoundaryEdge|edgeOrientation|hTriangle|InternalEdge|lenEdge|nTonEdge|nuEdge|nuTriangle|N|P)| (ARGV|version|verbosity) |(CG|GMRES|sparsesolver|Cholesky|Crout) | (qf1pE|qf1pElump|qf1pT|qf1pTlump|qfV1|qfV1lump|qf2pE|qf2pT|qf2pT4P1|qfV2|qf3pE|qf4pE|qf5pE|qf5pT|qfV5|qf7pT|qf9pT|qfnbpE)| (BDM1|BDM1Ortho|Edge03d|Edge13d|Edge23d|FEQF|HCT|P0|P03d|P0Edge|P1|P13d|P1b|P1b3d|P1bl|P1bl3d|P1dc|P1Edge|P1nc|P2|P23d|P2b|P2BR|P2dc|P2Edge|P2h|P2Morley|P2pnc|P3|P3dc|P3Edge|P4|P4dc|P4Edge|P5Edge|RT0|RT03d|RT0Ortho|RT1|RT1Ortho|RT2|RT2Ortho) |(mpirank|mpisize|mpiCommWorld|mpiSUM|mpiBXOR|mpiLAND|mpiLOR|mpiLXOR|mpiMAX|mpiMIN|mpiPROD|mpiBAND|mpiUndefined|mpiAnySource) \n  )\\b\n",
 			"captures": {
 				"1": {
-					"name": "variable.language.special.coordinates.python"
+					"name": "variable.language.special.coordinates.freefem"
 				},
 				"2": {
-					"name": "variable.language.special.mesh.python"
+					"name": "variable.language.special.mesh.freefem"
 				},
 				"3": {
-					"name": "variable.language.special.utils.python"
+					"name": "variable.language.special.utils.freefem"
 				},
 				"4": {
-					"name": "variable.language.special.solvers.python"
+					"name": "variable.language.special.solvers.freefem"
 				},
 				"5": {
-					"name": "variable.language.special.quadratures.python"
-				}
-				,
+					"name": "variable.language.special.quadratures.freefem"
+				},
+				"6": {
+					"name": "variable.language.special.FE.freefem"
+				},
 				"7": {
-					"name": "variable.language.special.mpi.python"
+					"name": "variable.language.special.mpi.freefem"
 				}
 			}
 		}
