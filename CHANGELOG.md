@@ -6,4 +6,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [2.0.3] - 2019-12-07
+
+- finite element spaces added
+
+## [2.0.2] - 2019-11-25
+
 - Initial release
