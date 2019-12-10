@@ -70,7 +70,7 @@
 		},
 		"function-declaration-multi-lines":{
 			"name": "meta.function.freefem",
-			"begin": "(?x)  \\s* \\b(func)\\s+ ([[:alpha:]_][[:word:]]*) \\s+  ([[:alpha:]_][[:word:]]* \\s* )(?=\\()",
+			"begin": "(?x)  \\s* \\b(func)\\s+ ([[:alpha:]_][[:word:]]*)(?:(\\[)([[:alpha:]_][[:word:]]*)(\\]))? \\s+  ([[:alpha:]_][[:word:]]* \\s* )(?=\\()",
 			"end": "(\\})",
 			"beginCaptures": {
 				"1": {
@@ -80,6 +80,15 @@
 					"name": "support.type.freefem"
 				},
 				"3": {
+					"name": "punctuation.definition.list.begin.freefem"
+				},
+				"4": {
+					"name": "support.type.freefem"
+				},
+				"5": {
+					"name": "punctuation.definition.list.end.freefem"
+				},
+				"6": {
 					"name": "entity.name.function.freefem"
 				}
 			},
