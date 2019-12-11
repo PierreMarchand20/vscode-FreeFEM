@@ -154,6 +154,9 @@
 					"include": "#builtin-types"
 				},
 				{
+					"include": "#list"
+				},
+				{
 					"name": "keyword.operator.unpacking.parameter.freefem",
 					"match": "(\\*\\*|\\*)"
 				}
