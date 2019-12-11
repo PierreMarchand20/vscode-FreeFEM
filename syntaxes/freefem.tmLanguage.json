@@ -366,7 +366,7 @@
 			}
 		},
 		"operator":{
-		"match": "(?x)\\b(?<!\\.)(?:(!|&&|\\|\\||\\?)(?# 1)|(for | if | else | return | try | while | break | catch | continue | IFMACRO | ENDIFMACRO)  (?# 2))(?!\\s*:)\\b| (<< | >> | \\^)(?# 3)| (\\*\\* | \\* | \\+ | - | % | / | \\+\\+ | --)(?# 4)| (!= | == | >= | <= | < | >)(?# 5)",
+		"match": "(?x) (!|\\&\\&|\\|\\||\\?)(?# 1)| \\b(?<!\\.)(for | if | else | return | try | while | break | catch | continue | IFMACRO | ENDIFMACRO)(?!\\s*:)\\b  (?# 2)| (<< | >> | \\^)(?# 3)| (\\*\\* | \\* | \\+ | - | % | / | \\+\\+ | --)(?# 4)| (!= | == | >= | <= | < | >)(?# 5)",
 		"captures":{
 			"1":{"name": "keyword.operator.logical.freefem"},
 			"2":{"name": "keyword.control.flow.freefem"},
