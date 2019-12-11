@@ -208,7 +208,7 @@
 			"patterns": [
 				{
 					"name": "punctuation.terminator.statement.freefem",
-					"match": "\\;$"
+					"match": "\\;\\s*$"
 				}
 			]
 		},
