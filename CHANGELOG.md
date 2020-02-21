@@ -6,6 +6,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [2.0.4] - 2020-02-21
+
+- .idp file added
+  
 ## [2.0.3] - 2019-12-07
 
 - finite element spaces added

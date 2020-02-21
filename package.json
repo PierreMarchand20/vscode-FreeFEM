@@ -26,7 +26,8 @@
                     "freefem"
                 ],
                 "extensions": [
-                    ".edp"
+                    ".edp",
+                    ".idp"
                 ],
                 "configuration": "./language-configuration.json"
             }
