@@ -6,7 +6,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
-## [2.0.4] - 2020-02-21
+## [2.0.7] - 2020-04-09
+
+- array member functions added
+
+## [2.0.6] - 2020-02-21
 
 - .idp file added
   

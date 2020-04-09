@@ -568,7 +568,7 @@
 			}
 		},
 		"builtin-member-access":{
-			"match": "(?x)(x|y|z|nv|nt|nbe)",
+			"match": "(?x) \\b(x|y|z|nv|nt|nbe|sort|max|min|n|m|imin|imax|jmax|jmin|quantile)\\b",
 			"captures": {
 				"1": {
 					"name": "variable.parameter.member-access.freefem"
