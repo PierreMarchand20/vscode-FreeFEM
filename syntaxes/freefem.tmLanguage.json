@@ -360,7 +360,7 @@
 		"string": {
 			"name": "string.quoted.double.freefem",
 			"begin": "\"",
-			"end": "\"|((?<!\\\\)\\n)",
+			"end": "(?<!\\\\)\"|((?<!\\\\)\\n)",
 			"beginCaptures":{
 				"1": {"name": "punctuation.definition.string.begin.freefem"}
 			},
