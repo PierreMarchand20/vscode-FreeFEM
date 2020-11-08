@@ -6,7 +6,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
-## [2.0.9] - 2020-04-09
+## [2.0.9] - 2020-10-10
 
 - Fix double quote PR #2
 
