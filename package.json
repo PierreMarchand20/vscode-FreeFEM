@@ -6,7 +6,7 @@
     "name": "vscode-freefem",
     "displayName": "vscode-FreeFEM",
     "description": "FreeFEM language support in Visual Studio Code",
-    "version": "2.0.8",
+    "version": "2.0.9",
     "keywords": [
         "FreeFEM",
         "language"
