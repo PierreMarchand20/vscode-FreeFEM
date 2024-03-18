@@ -17,6 +17,8 @@
     "categories": [
         "Programming Languages"
     ],
+    "main": "./out/extension.js",
+    "activationEvents": [],
     "contributes": {
         "languages": [
             {
@@ -38,7 +40,51 @@
                 "scopeName": "source.edp",
                 "path": "./syntaxes/freefem.tmLanguage.json"
             }
+        ],
+        "commands": [
+            {
+                "title": "Run current FreeFEM file",
+                "command": "freefem.runFile",
+                "category": "FreeFEM",
+                "icon": "$(run)",
+                "when": "resourceLangId == freefem"
+            }
+        ],
+        "menus": {
+            "editor/title/run": [
+                {
+                    "command": "freefem.runFile",
+                    "group": "navigation@0",
+                    "title": "Run current FreeFEM file",
+                    "when": "resourceLangId == freefem"
+                }
+            ]
+        },
+        "keybindings": [
+            {
+                "key": "shift+cmd+r",
+                "command": "freefem.runFile"
+            }
         ]
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "pretest": "npm run compile && npm run lint",
+        "lint": "eslint src --ext ts",
+        "test": "vscode-test"
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.87.0",
+        "@types/mocha": "^10.0.6",
+        "@types/node": "18.x",
+        "@typescript-eslint/eslint-plugin": "^7.0.2",
+        "@typescript-eslint/parser": "^7.0.2",
+        "eslint": "^8.56.0",
+        "typescript": "^5.3.3",
+        "@vscode/test-cli": "^0.0.6",
+        "@vscode/test-electron": "^2.3.9"
     },
     "icon": "logos/logo.png",
     "homepage": "https://freefem.org",
