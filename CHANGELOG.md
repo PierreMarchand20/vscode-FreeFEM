@@ -6,6 +6,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [2.1.0] - 2024-05-05
+
+- Define `freefem.runFile` command to run current file, while parsing its content for number of MPI processes and parameters.
+- Add `freefem.runFile` command to editor menu.
+- Add key binding `shift+cmd+r` for `freefem.runFile`.
+
 ## [2.0.9] - 2020-10-10
 
 - Fix double quote PR #2
