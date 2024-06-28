@@ -27,7 +27,7 @@ export function activate(context: vscode.ExtensionContext) {
                 // Get the document text
                 const documentText = document.getText();
 
-                const lines = documentText.split('\n');
+                const lines = documentText.split(/\r?\n/);
 
                 lines.forEach(function (line) {
                     if (line.startsWith("//") && line.includes("NBPROC")) {

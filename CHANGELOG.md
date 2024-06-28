@@ -6,6 +6,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [2.1.1] - 2024-06-28
+
+- Fix issue with CR LF.
+
 ## [2.1.0] - 2024-05-05
 
 - Define `freefem.runFile` command to run current file, while parsing its content for number of MPI processes and parameters.
