@@ -1,7 +1,8 @@
 import path from 'path';
 import * as vscode from 'vscode';
+import * as shiki from 'shiki';
 
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
     console.log('Running FreeFEM extension');
@@ -66,6 +67,31 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     context.subscriptions.push(disposable);
+
+    let Highlighter : any;
+
+    const fflang = {
+        "id": "freefem",
+        "language": "freefem",
+        "scopeName": "source.edp",
+        "path": context.asAbsolutePath('syntaxes/freefem.tmLanguage.json')
+    }
+
+    await shiki.getHighlighter({
+        theme: 'nord',
+        langs: [fflang]
+    }).then(highlighter => {
+        Highlighter = highlighter;
+    })
+
+    return {
+        extendMarkdownIt(md: any) {
+            const { highlight } = md.options;
+            md.options.highlight = (code: any, lang = '') =>
+                lang.match(/\bfreefem\b/i) ? Highlighter.codeToHtml(code, 'freefem') : highlight(code, lang);
+            return md;
+        }
+    };
 }
 
 // this method is called when your extension is deactivated

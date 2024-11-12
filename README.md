@@ -4,7 +4,9 @@
 
 - Syntax highlighting for [FreeFEM](https://freefem.org)
 
-<img src="img/membrane.png" width="70%">
+<p align="center" width="100%">
+    <img src="img/membrane.png" width="70%">
+</p>
 
 - A command to run current FreeFEM file, accessible via command palette, editor menu or key binding `shift+cmd+r`. It parses the current file for number of MPI processes and parameters.
 
@@ -14,6 +16,12 @@
     // NBPROC 4
     // PARAM -wg -ns
     ```
+
+- Syntax highlighting for markdown preview.
+
+<p align="center" width="100%">
+    <img src="img/markdown.png" width="70%">
+</p>
 
 ## Release Notes
 
