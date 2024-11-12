@@ -6,7 +6,7 @@
     "name": "vscode-freefem",
     "displayName": "vscode-FreeFEM",
     "description": "FreeFEM language support in Visual Studio Code",
-    "version": "2.1.1",
+    "version": "2.2.0",
     "keywords": [
         "FreeFEM",
         "language"
@@ -20,6 +20,7 @@
     "main": "./out/extension.js",
     "activationEvents": [],
     "contributes": {
+        "markdown.markdownItPlugins": true,
         "languages": [
             {
                 "id": "freefem",
@@ -47,7 +48,7 @@
                 "command": "freefem.runFile",
                 "category": "FreeFEM",
                 "icon": "$(run)",
-                "when": "resourceLangId == freefem"
+                "when": "resourceLangId == freefem || editorLangId == markdown"
             }
         ],
         "menus": {
@@ -56,7 +57,7 @@
                     "command": "freefem.runFile",
                     "group": "navigation@0",
                     "title": "Run current FreeFEM file",
-                    "when": "resourceLangId == freefem"
+                    "when": "resourceLangId == freefem || editorLangId == markdown"
                 }
             ]
         },
@@ -84,7 +85,8 @@
         "eslint": "^8.56.0",
         "typescript": "^5.3.3",
         "@vscode/test-cli": "^0.0.6",
-        "@vscode/test-electron": "^2.3.9"
+        "@vscode/test-electron": "^2.3.9",
+        "shiki": "^0.14"
     },
     "icon": "logos/logo.png",
     "homepage": "https://freefem.org",
