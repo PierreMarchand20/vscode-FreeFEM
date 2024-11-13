@@ -6,6 +6,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [2.2.1] - 2024-11-13
+
+- Fix issue with dependency.
+
 ## [2.2.0] - 2024-11-13
 
 - Add syntax highlighting for markdown preview

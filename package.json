@@ -6,7 +6,7 @@
     "name": "vscode-freefem",
     "displayName": "vscode-FreeFEM",
     "description": "FreeFEM language support in Visual Studio Code",
-    "version": "2.2.0",
+    "version": "2.2.1",
     "keywords": [
         "FreeFEM",
         "language"
@@ -76,6 +76,9 @@
         "lint": "eslint src --ext ts",
         "test": "vscode-test"
     },
+    "dependencies": {
+        "shiki": "^0.14"
+    },
     "devDependencies": {
         "@types/vscode": "^1.87.0",
         "@types/mocha": "^10.0.6",
@@ -85,8 +88,7 @@
         "eslint": "^8.56.0",
         "typescript": "^5.3.3",
         "@vscode/test-cli": "^0.0.6",
-        "@vscode/test-electron": "^2.3.9",
-        "shiki": "^0.14"
+        "@vscode/test-electron": "^2.3.9"
     },
     "icon": "logos/logo.png",
     "homepage": "https://freefem.org",
