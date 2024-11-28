@@ -6,7 +6,7 @@
     "name": "vscode-freefem",
     "displayName": "vscode-FreeFEM",
     "description": "FreeFEM language support in Visual Studio Code",
-    "version": "2.2.1",
+    "version": "2.2.2",
     "keywords": [
         "FreeFEM",
         "language"
@@ -33,6 +33,9 @@
                     ".idp"
                 ],
                 "configuration": "./language-configuration.json"
+            },
+            {
+                "id": "freefem-markdown-injection"
             }
         ],
         "grammars": [
@@ -40,6 +43,17 @@
                 "language": "freefem",
                 "scopeName": "source.edp",
                 "path": "./syntaxes/freefem.tmLanguage.json"
+            },
+            {
+                "language": "freefem-markdown-injection",
+                "scopeName": "markdown.freefem.codeblock",
+                "path": "./syntaxes/freefem-markdown-injection.json",
+                "injectTo": [
+                    "text.html.markdown"
+                ],
+                "embeddedLanguages": {
+                    "meta.embedded.block.freefem": "freefem"
+                }
             }
         ],
         "commands": [
