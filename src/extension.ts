@@ -48,13 +48,13 @@ export async function activate(context: vscode.ExtensionContext) {
             terminal.show()
             if (nbproc == '1') {
                 if (process.platform === 'win32')
-                    terminal.sendText("FreeFem++.exe \"" + currentlyOpenTabfilePathTo + "/" + currentlyOpenTabfileName + "\" -cd " + param);
+                    terminal.sendText("FreeFem++.exe \"" + currentlyOpenTabfilePathTo + "\\" + currentlyOpenTabfileName + "\" -cd " + param);
                 else
                     terminal.sendText("FreeFem++ \"" + currentlyOpenTabfilePathTo + "/" + currentlyOpenTabfileName + "\" -cd " + param);
             }
             else {
                 if (process.platform === 'win32')
-                    terminal.sendText("mpiexec.exe -np " + nbproc + " FreeFem++-mpi.exe \"" + currentlyOpenTabfilePathTo + "/" + currentlyOpenTabfileName + "\" -cd " + param);
+                    terminal.sendText("mpiexec.exe -np " + nbproc + " FreeFem++-mpi.exe \"" + currentlyOpenTabfilePathTo + "\\" + currentlyOpenTabfileName + "\" -cd " + param);
                 else
                     terminal.sendText("ff-mpirun -np " + nbproc + " \"" + currentlyOpenTabfilePathTo + "/" + currentlyOpenTabfileName + "\" -cd " + param);
             }
@@ -68,7 +68,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(disposable);
 
-    let Highlighter : any;
+    let Highlighter: any;
 
     const fflang = {
         "id": "freefem",
