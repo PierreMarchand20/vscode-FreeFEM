@@ -1,0 +1,14 @@
+// Regression: a varf declared inside a { } block used to crash (SIGBUS) once
+// ListOfInst got extra members, because the grammar rule for
+// "varf id(...) = ..." wrote `atclose` into the varf *type* object.
+// Expected last line: "varf block OK"
+mesh Th = square(3, 3);
+fespace Vh(Th, P1);
+Vh u1;
+real[int] b(Vh.ndof); b = 1;
+{
+  varf vL(u, v) = int2d(Th)(dx(u)*dx(v) + u*v);
+  matrix L = vL(Vh, Vh);
+  u1[] = L^-1*b;
+}
+cout << "varf block OK" << endl;

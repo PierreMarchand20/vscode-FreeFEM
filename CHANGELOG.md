@@ -6,6 +6,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+- Add a debugger for FreeFEM scripts (breakpoints, stepping, call stack, variables, Debug Console, Pause), with the `freefem.debugFile` command and the `freefem.executable` and `freefem.ffglut` settings. It needs a FreeFEM built with the debugger support, see `docs/debugger.md`.
+
 ## [2.2.1] - 2024-11-13
 
 - Fix issue with dependency.
