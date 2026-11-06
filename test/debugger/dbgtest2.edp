@@ -1,0 +1,18 @@
+real x = 1;
+if (x > 0)
+{
+  x = x + 1;
+}
+else
+{
+  x = x - 1;
+}
+real y =
+   x
+   + 10;
+for (int k=0; k<2; k++)
+{
+  y = y + k;
+  y = y * 1;
+}
+cout << "y=" << y << endl;

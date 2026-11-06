@@ -1,0 +1,4 @@
+real m = 1;
+include "inctest_inc.edp";
+m = m + 100;
+cout << "m=" << m << " q=" << q << endl;

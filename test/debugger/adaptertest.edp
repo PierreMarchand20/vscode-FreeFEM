@@ -1,0 +1,15 @@
+// header comment
+real x = 2;
+
+// another comment
+real y = x * 3;
+func real sq(real t)
+{
+  return t*t;
+}
+real z = sq(y);
+for (int i=0;i<2;i++)
+{
+  z = z + i;
+}
+cout << "z=" << z << endl;

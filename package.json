@@ -18,7 +18,9 @@
         "Programming Languages"
     ],
     "main": "./out/extension.js",
-    "activationEvents": [],
+    "activationEvents": [
+        "onDebugResolve:freefem"
+    ],
     "contributes": {
         "markdown.markdownItPlugins": true,
         "languages": [
@@ -63,6 +65,13 @@
                 "category": "FreeFEM",
                 "icon": "$(run)",
                 "when": "resourceLangId == freefem || editorLangId == markdown"
+            },
+            {
+                "title": "Debug current FreeFEM file",
+                "command": "freefem.debugFile",
+                "category": "FreeFEM",
+                "icon": "$(debug-alt)",
+                "when": "resourceLangId == freefem"
             }
         ],
         "menus": {
@@ -72,6 +81,12 @@
                     "group": "navigation@0",
                     "title": "Run current FreeFEM file",
                     "when": "resourceLangId == freefem || editorLangId == markdown"
+                },
+                {
+                    "command": "freefem.debugFile",
+                    "group": "navigation@1",
+                    "title": "Debug current FreeFEM file",
+                    "when": "resourceLangId == freefem"
                 }
             ]
         },
@@ -79,6 +94,96 @@
             {
                 "key": "shift+cmd+r",
                 "command": "freefem.runFile"
+            }
+        ],
+        "configuration": {
+            "title": "FreeFEM",
+            "properties": {
+                "freefem.executable": {
+                    "type": "string",
+                    "default": "",
+                    "markdownDescription": "Interpreter used by the debugger. Empty = `FreeFem++` found on `PATH`. It must be a FreeFEM built with the debugger support (see the README)."
+                },
+                "freefem.ffglut": {
+                    "type": "string",
+                    "default": "",
+                    "markdownDescription": "Plot viewer used by the debugger, passed as `-glut`. Empty = let FreeFem++ find its own."
+                }
+            }
+        },
+        "breakpoints": [
+            {
+                "language": "freefem"
+            }
+        ],
+        "debuggers": [
+            {
+                "type": "freefem",
+                "label": "FreeFEM",
+                "languages": [
+                    "freefem"
+                ],
+                "configurationAttributes": {
+                    "launch": {
+                        "required": [
+                            "program"
+                        ],
+                        "properties": {
+                            "program": {
+                                "type": "string",
+                                "description": "The .edp script to run.",
+                                "default": "${file}"
+                            },
+                            "stopOnEntry": {
+                                "type": "boolean",
+                                "description": "Stop before the first statement.",
+                                "default": false
+                            },
+                            "args": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "description": "Extra interpreter arguments, e.g. [\"-v\",\"0\"].",
+                                "default": []
+                            },
+                            "cwd": {
+                                "type": "string",
+                                "description": "Working directory (default: the script's folder)."
+                            },
+                            "executable": {
+                                "type": "string",
+                                "description": "Interpreter to run (default: the freefem.executable setting, else FreeFem++ on PATH)."
+                            },
+                            "ffglut": {
+                                "type": "string",
+                                "description": "Plot viewer passed as -glut (default: the freefem.ffglut setting)."
+                            }
+                        }
+                    }
+                },
+                "initialConfigurations": [
+                    {
+                        "type": "freefem",
+                        "request": "launch",
+                        "name": "FreeFEM: debug current file",
+                        "program": "${file}",
+                        "stopOnEntry": false
+                    }
+                ],
+                "configurationSnippets": [
+                    {
+                        "label": "FreeFEM: debug a script",
+                        "description": "Debug an .edp file",
+                        "body": {
+                            "type": "freefem",
+                            "request": "launch",
+                            "name": "FreeFEM: debug ${1:script}",
+                            "program": "^\"\\${file}\"",
+                            "stopOnEntry": false
+                        }
+                    }
+                ]
             }
         ]
     },
@@ -88,7 +193,9 @@
         "watch": "tsc -watch -p ./",
         "pretest": "npm run compile && npm run lint",
         "lint": "eslint src --ext ts",
-        "test": "vscode-test"
+        "test": "vscode-test",
+        "test:debugger": "npm run compile && node test/debugger/extension-mock.test.js",
+        "test:debugger:interpreter": "npm run compile && node test/debugger/adapter.test.js && python3 test/debugger/suite.py"
     },
     "dependencies": {
         "shiki": "^0.14"

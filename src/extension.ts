@@ -1,6 +1,7 @@
 import path from 'path';
 import * as vscode from 'vscode';
 import * as shiki from 'shiki';
+import { activateDebugger } from './debug';
 
 export async function activate(context: vscode.ExtensionContext) {
     // Use the console to output diagnostic information (console.log) and errors (console.error)
@@ -67,6 +68,9 @@ export async function activate(context: vscode.ExtensionContext) {
     });
 
     context.subscriptions.push(disposable);
+
+    // Debugger (breakpoints, stepping, variables): see docs/debugger.md
+    activateDebugger(context);
 
     let Highlighter: any;
 

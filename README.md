@@ -17,6 +17,8 @@
     // PARAM -wg -ns
     ```
 
+- A debugger: breakpoints in the gutter, stepping, call stack, variables and a Debug Console that runs FreeFEM statements on the live state. Press `F5` on a `.edp` file, or use the *Debug current FreeFEM file* button in the editor title bar. It needs a FreeFEM built with the debugger support (the `debugger` branch of [FreeFem-sources](https://github.com/FreeFem/FreeFem-sources/tree/debugger)), see [docs/debugger.md](docs/debugger.md).
+
 - Syntax highlighting for markdown preview.
 
 <p align="center" width="100%">
